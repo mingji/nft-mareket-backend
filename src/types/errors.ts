@@ -1,0 +1,15 @@
+export enum Errors {
+    CONFIG_CONTRACT_NOT_FOUND = 'The contract does not exist in the config',
+    EIP_CONTRACT_FETCH_EMPTY_DATA = 'Contract data is empty',
+    UNDEFINED_TOKEN_COLLECTION_INSTANCE = 'Contract doesnt exist',
+    EMPTY_EIP_TOKEN_METADATA = 'Token metadata is empty',
+    WRONG_EIP_TOKEN_IMAGE_URL = 'Wrong eip token image url',
+    WRONG_IMAGE_BUFFER = 'Wrong image buffer',
+    NONCE_OBJECT_NOT_FOUND = 'Nonce not found',
+    NOT_ENOUGH_TOKENS_BALANCE = 'Not enough tokens on the balance',
+    TRANSACTION_NONCE_EXISTS = 'The transaction with the specified nonce exists',
+    WRONG_CURRENCY = 'Wrong currency',
+    WRONG_SALE_CONTRACT = 'Wrong sale contract',
+    WRONG_SLUG_FORMAT = 'WRONG_SLUG_FORMAT',
+    CAN_NOT_STORE_IMAGE = 'CAN_NOT_STORE_IMAGE',
+}

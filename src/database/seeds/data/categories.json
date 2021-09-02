@@ -1,0 +1,122 @@
+[
+  {
+    "title": {
+      "en": "Art"
+    },
+    "icon": {
+      "key": "categories/art.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/art.png",
+      "etag": "\"1ddee0e51199326c9234f537f81fd74f\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "art.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Domain Names"
+    },
+    "icon": {
+      "key": "categories/domain_names.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/domain_names.png",
+      "etag": "\"36021c01f6973400ed76d19048ea1dfb\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "domain_names.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Virtual Worlds"
+    },
+    "icon": {
+      "key": "categories/virtual_worlds.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/virtual_worlds.png",
+      "etag": "\"983ddfcd4910e747cd5a4c91099e43d2\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "virtual_worlds.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Trading Cards"
+    },
+    "icon": {
+      "key": "categories/collectibles.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/trading_cards.png",
+      "etag": "\"4a100719ebe711292219cdfc78786f69\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "trading_cards.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Collectibles"
+    },
+    "icon": {
+      "key": "categories/collectibles.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/collectibles.png",
+      "etag": "\"ddfacb1bb2e8bc0c9cc7724b854d3b95\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "collectibles.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Social Media"
+    },
+    "icon": {
+      "key": "categories/social_medias.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/social_medias.png",
+      "etag": "\"dee5b729ca35d6d8bf86cea1be792024\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "social_medias.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Utilities"
+    },
+    "icon": {
+      "key": "categories/utilities.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/utilities.png",
+      "etag": "\"87b6eda8761f7e90a36b3a23add8d36e\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "utilities.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  },
+  {
+    "title": {
+      "en": "Music"
+    },
+    "icon": {
+      "key": "categories/music.png",
+      "location": "https://bondly-public-files-:stage.s3.amazonaws.com/categories/music.png",
+      "etag": "\"e114038854c3d2546f8d4f9473fcb391\"",
+      "bucket": "bondly-public-files-:stage",
+      "provider": "s3",
+      "title": "music.png",
+      "mimetype": "image/png",
+      "extension": "png"
+    }
+  }
+]

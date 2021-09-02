@@ -1,0 +1,259 @@
+service:
+  name: bondly
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-plugin-scripts
+  - serverless-domain-manager
+  - serverless-apigw-binary
+
+custom:
+  nodeEnv:
+    prod: production
+    dev: dev
+    staging: staging
+
+  apigwBinary:
+    types:
+      - '*/*'
+
+  stage: ${opt:stage, self:provider.stage}
+  
+  domains:
+    prod: api.bp.market
+    staging : staging-api.bp.market
+    dev: dev-api.bp.market
+  
+  customDomain:
+    domainName: ${self:custom.domains.${self:custom.stage}}
+    stage: "${self:custom.stage}"
+    basePath: ''
+    certificateName: 'bp.market'
+    createRoute53Record: true
+    endpointType: 'edge'
+
+  bucketPublicPrefix: 'bondly-public-files-'
+
+  bucketFrontendPrefix: 'bondly-frontend-files-'
+
+  websiteDomain:
+    prod: https://bp.market
+    staging: https://stage--bondly.netlify.app
+    dev: https://dev--bondly.netlify.app
+
+  corsOrigins:
+    dev:
+      - ${self:custom.websiteDomain.${self:custom.stage}}
+    staging:
+      - ${self:custom.websiteDomain.${self:custom.stage}}
+    prod:
+      - ${self:custom.websiteDomain.${self:custom.stage}}
+
+  s3CorsRules:
+    prod:
+      - AllowedOrigins: ${self:custom.corsOrigins.${self:custom.stage}}
+        AllowedHeaders:
+          - '*'
+        AllowedMethods:
+          - GET
+          - PUT
+          - HEAD
+        MaxAge: 3000
+    staging:
+      - AllowedOrigins: ${self:custom.corsOrigins.${self:custom.stage}}
+        AllowedHeaders:
+          - '*'
+        AllowedMethods:
+          - GET
+          - PUT
+          - HEAD
+        MaxAge: 3000
+    dev:
+      - AllowedOrigins: ${self:custom.corsOrigins.${self:custom.stage}}
+        AllowedHeaders:
+          - '*'
+        AllowedMethods:
+          - GET
+          - PUT
+          - HEAD
+        MaxAge: 3000
+
+package:
+  excludeDevDependencies: true
+  exclude:
+    - node_modules/aws-sdk/**
+    - node_modules/typescript/**
+    - node_modules/@types/**
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:DeleteObject
+      Resource: arn:aws:s3:::${self:custom.bucketPublicPrefix}${opt:stage}/*
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:DeleteObject
+      Resource: arn:aws:s3:::${self:custom.bucketFrontendPrefix}${opt:stage}/*
+  environment:
+    NODE_ENV: ${self:custom.nodeEnv.${opt:stage}}
+    APP_NAME: ${ssm:app_name_${opt:stage}}
+    APP_BASE_URL: ${ssm:app_base_url_${opt:stage}}
+    APP_GLOBAL_ROUTE_PREFIX: ${ssm:app_global_route_prefix_${opt:stage}}
+    CRYPT_SECRET_KEY: ${ssm:crypt_secret_key_${opt:stage}~true}
+    MONGODB_URL: ${ssm:mongodb_url_${opt:stage}~true}
+    MONGODB_NAME: ${ssm:mongodb_name_${opt:stage}}
+    MAILER_HOST: ${ssm:mailer_host_${opt:stage}}
+    MAILER_EMAIL: ${ssm:mailer_email_${opt:stage}}
+    MAILER_PASSWORD: ${ssm:mailer_password_${opt:stage}~true}
+    JWT_SECRET: ${ssm:jwt_secret_${opt:stage}~true}
+    JWT_EXPIRES_IN: ${ssm:jwt_expires_in_${opt:stage}}
+    SIGNATURE_EXPIRES_IN: ${ssm:signature_expires_in_${opt:stage}}
+    SWAGGER_DOCUMENTATION_PATH: ${ssm:swagger_doc_path_${opt:stage}}
+    LOG_CONSOLE_LEVEL: ${ssm:log_console_level_${opt:stage}}
+    LOG_FILE_LEVEL: ${ssm:log_file_level_${opt:stage}}
+    LOG_MAX_FILE_SIZE: ${ssm:log_max_file_size_${opt:stage}}
+    LOG_MAX_FILES: ${ssm:log_max_files_${opt:stage}}
+    SENTRY_DSN: ${ssm:sentry_dsn_${opt:stage}~true}
+    STORAGE_S3_BUCKET_PUBLIC: ${self:custom.bucketPublicPrefix}${opt:stage}
+    STORAGE_S3_BUCKET_FRONTEND: ${self:custom.bucketFrontendPrefix}${opt:stage}
+    COIN_MARKET_CAP_API_KEY: ${ssm:coin_market_cap_api_key_${opt:stage}~true}
+    COIN_MARKET_CAP_API_BASE_URL: ${ssm:coin_market_cap_api_base_url_${opt:stage}}
+    CONTRACTS: ${ssm:contracts_${opt:stage}}
+    METADATA_URI_DOMAIN: ${ssm:metadata_uri_domain_${opt:stage}}
+    MARKET_PLACE_FEE_ADDRESS: ${ssm:market_place_fee_address_${opt:stage}}
+    MARKET_PLACE_PRIVATE_KEY: ${ssm:market_place_private_key_${opt:stage}~true}
+    ETHEREUM_WEB3_HTTP_PROVIDER: ${ssm:ethereum_web3_http_provider_${opt:stage}}
+    ETHEREUM_SALE_CONTRACT_PROXY: ${ssm:ethereum_sale_contract_proxy_${opt:stage}}
+    ETHEREUM_SALE_CONTRACT: ${ssm:ethereum_sale_contract_${opt:stage}}
+    ETHEREUM_ALLOWED_CRYPTOCURRENCIES: ${ssm:ethereum_allowed_cryptocurrencies_${opt:stage}}
+    ETHEREUM_SUBGRAPH_PATH: ${ssm:ethereum_subgraph_path_${opt:stage}}
+    ETHEREUM_SALE_START_BLOCK_NUMBER: ${ssm:ethereum_sale_start_block_number_${opt:stage}}
+    ETHEREUM_CREATED_CONTRACT_START_BLOCK_NUMBER: ${ssm:ethereum_created_contract_start_block_number_${opt:stage}}
+    ETHEREUM_CREATED_TOKEN_START_BLOCK_NUMBER: ${ssm:ethereum_created_token_start_block_number_${opt:stage}}
+    ETHEREUM_LAUNCHPAD_SALE_START_BLOCK_NUMBER: ${ssm:ethereum_launchpad_sale_start_block_number_${opt:stage}}
+    MATIC_WEB3_HTTP_PROVIDER: ${ssm:matic_web3_http_provider_${opt:stage}}
+    MATIC_SALE_CONTRACT_PROXY: ${ssm:matic_sale_contract_proxy_${opt:stage}}
+    MATIC_SALE_CONTRACT: ${ssm:matic_sale_contract_${opt:stage}}
+    MATIC_ALLOWED_CRYPTOCURRENCIES: ${ssm:matic_allowed_cryptocurrencies_${opt:stage}}
+    MATIC_SUBGRAPH_PATH: ${ssm:matic_subgraph_path_${opt:stage}}
+    MATIC_SALE_START_BLOCK_NUMBER: ${ssm:matic_sale_start_block_number_${opt:stage}}
+    MATIC_CREATED_CONTRACT_START_BLOCK_NUMBER: ${ssm:matic_created_contract_start_block_number_${opt:stage}}
+    MATIC_CREATED_TOKEN_START_BLOCK_NUMBER: ${ssm:matic_created_token_start_block_number_${opt:stage}}
+    MATIC_BURNED_TOKEN_START_BLOCK_NUMBER: ${ssm:matic_burned_token_start_block_number_${opt:stage}}
+    MATIC_TRANSFER_TOKEN_START_BLOCK_NUMBER: ${ssm:matic_transfer_token_start_block_number_${opt:stage}}
+    MATIC_LAUNCHPAD_SALE_START_BLOCK_NUMBER: ${ssm:matic_launchpad_sale_start_block_number_${opt:stage}}
+    S3_ACCESS_KEY_ID: ${ssm:s3_access_key_id_${opt:stage}~true}
+    S3_SECRET_ACCESS_KEY: ${ssm:s3_secret_access_key_${opt:stage}~true}
+
+functions:
+  main:
+    handler: src/lambda.handler
+    timeout: 30
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+  updateCryptocurrencies:
+    handler: src/updateCryptocurrencies.handler
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 day)
+  updateSalePrices:
+    handler: src/updateSalePrices.handler
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 hour)
+  ethereumSellListener:
+    handler: src/ethereumSellListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticSellListener:
+    handler: src/maticSellListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticCreatedContractListener:
+    handler: src/maticCreatedContractListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticCreatedTokenListener:
+    handler: src/maticCreatedTokenListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticBurnedTokenListener:
+    handler: src/maticBurnedTokenListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticTransferTokenListener:
+    handler: src/maticTransferTokenListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+  maticLaunchpadSaleListener:
+    handler: src/maticLaunchpadSaleListener.handler
+    timeout: 30
+    reservedConcurrency: 1
+    events:
+      - schedule: rate(1 minute)
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketPublicPrefix}${self:custom.stage}
+        CorsConfiguration:
+          CorsRules: ${self:custom.s3CorsRules.${self:custom.stage}}
+    S3BucketAllowPublicReadPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3Bucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicRead
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
+              Resource:
+                - !Join ['', [Fn::GetAtt: [ S3Bucket, Arn ], '/*']]
+              Effect: Allow
+    S3FrontendBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketFrontendPrefix}${opt:stage}
+        CorsConfiguration:
+          CorsRules: ${self:custom.s3CorsRules.${self:custom.stage}}
+    S3FrontendBucketAllowPublicReadPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3FrontendBucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: PublicRead
+              Principal: "*"
+              Action:
+                - "s3:GetObject"
+                - "s3:PutObject"
+              Resource:
+                - !Join ['', [Fn::GetAtt: [ S3FrontendBucket, Arn ], '/*']]
+              Effect: Allow

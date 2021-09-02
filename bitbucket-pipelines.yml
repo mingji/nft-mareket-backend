@@ -1,0 +1,65 @@
+image: lambci/lambda:build-nodejs12.x
+
+clone:
+  depth: full
+
+pipelines:
+    default:
+        - step:
+            caches:
+                - node
+            script:
+                - npm ci 
+                - npm run build 
+                - npm run test
+            services:
+                - mongo
+    branches:
+        development:
+            - step:
+                name: Run tests and dev deployment
+                deployment: develop
+                caches:
+                    - node
+                    - serverless
+                script:
+                    - npm ci 
+                    - npm run build 
+                    - npm run lint
+                    - npm run test
+                    - npm run deploy:dev
+                services:
+                  - mongo
+        master:
+            - step:
+                name: Run tests and staging deployment
+                deployment: staging
+                caches:
+                    - node
+                    - serverless
+                script:
+                    - npm ci 
+                    - npm run build 
+                    - npm run lint
+                    - npm run test
+                    - npm run deploy:stage
+                services:
+                  - mongo
+            - step:
+                name: Run production deployment
+                deployment: production
+                trigger: manual
+                caches:
+                    - node
+                    - serverless
+                script:
+                    - npm ci 
+                    - npm run build 
+                    - npm run deploy:prod
+
+definitions:
+  caches:
+    serverless: ~/.serverless
+  services:
+    mongo:
+      image: mongo:4.2.12

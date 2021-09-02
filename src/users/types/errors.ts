@@ -1,0 +1,4 @@
+export enum Errors {
+    USER_WITH_SLUG_EXISTS = 'USER_WITH_SLUG_EXISTS',
+    EMPTY_FILE_NAMES = 'EMPTY_FILE_NAMES',
+}

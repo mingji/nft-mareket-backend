@@ -1,0 +1,4 @@
+export enum Errors {
+    FOLLOW_EXISTS = 'FOLLOW_EXISTS',
+    FOLLOW_DOES_NOT_EXISTS = 'FOLLOW_DOES_NOT_EXISTS'
+}
